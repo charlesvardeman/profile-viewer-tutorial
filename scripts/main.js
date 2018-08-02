@@ -1,3 +1,4 @@
+const FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/');
 const VCARD = $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
 
 $(async () => {
@@ -44,5 +45,19 @@ async function loadProfile(person) {
   await fetcher.load(person);
   const fullName = store.any($rdf.sym(person), VCARD('fn'));
   $('#viewer').show();
+  $('#profile').val(person);
   $('#fullName').text(fullName && fullName.value);
+
+  // Load the person's friends
+  const friends = ['Alice', 'Bob', 'Carol'];
+  $('#friends').empty();
+  friends.forEach(async (friend) => {
+    $('#friends').append(
+      $('<li>').append(
+        $('<a>')
+          .text(friend)
+          .click(() => loadProfile(friend))
+      )
+    );
+  });
 }
